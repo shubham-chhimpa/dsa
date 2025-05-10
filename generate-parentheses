@@ -1,0 +1,20 @@
+class Solution {
+public:
+    void dfs(int n,int open,int close,vector<string> &ans,string tmp){
+        if(open ==close and ((open + close)) == n*2){
+            ans.push_back(tmp);
+            return;
+        }
+        if(open<n){
+            dfs(n,open+1,close,ans,tmp+"(");
+        }
+        if(close<open){
+            dfs(n,open,close+1,ans,tmp+")");
+        }
+    }
+    vector<string> generateParenthesis(int n) {
+        vector<string> ans;
+        dfs(n,0,0,ans,"");
+        return ans;
+    }
+};
