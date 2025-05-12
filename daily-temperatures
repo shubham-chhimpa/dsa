@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> dailyTemperatures(vector<int>& temperatures) {
+        stack<pair<int,int>> st;
+        vector<int> ans;
+        int len = temperatures.size()-1;
+
+        for(int i=len;i>=0;i--){
+            int curr = temperatures[i];
+            while(!st.empty() and st.top().first <=curr) st.pop();
+            if(!st.empty()){
+                auto top = st.top();
+                ans.push_back(top.second-i);
+            }
+            else{
+                ans.push_back(0);
+            }
+            st.push({curr,i});
+        }
+ 
+        reverse(ans.begin(),ans.end());
+        return ans; 
+    }
+};
