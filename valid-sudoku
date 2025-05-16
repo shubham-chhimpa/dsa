@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<unordered_set<char>> rowsSet(9);
+        vector<unordered_set<char>> colsSet(9);
+        unordered_map<string,unordered_set<char>> squareMap;
+        int rows = board.size();
+        int cols = board[0].size();
+        for(int r=0;r<rows;r++){
+            for(int c=0;c<cols;c++){
+                char val = board[r][c];
+                if(val =='.') continue;
+                if(rowsSet[r].find(val) !=rowsSet[r].end())return false;
+                if(colsSet[c].find(val) !=colsSet[c].end())return false;
+                rowsSet[r].insert(val);
+                colsSet[c].insert(val);
+                string squareIndex = to_string(r/3) + "-"+ to_string(c/3);
+                if(squareMap[squareIndex].find(val) !=squareMap[squareIndex].end())return false;
+                squareMap[squareIndex].insert(val);
+            }
+        }
+        return true;
+    }
+};
