@@ -19,3 +19,48 @@ public:
         }
     }
 };
+
+This is a correct and efficient implementation of the **Dutch National Flag algorithm**, commonly used to sort an array of 0s, 1s, and 2s **in-place** with a single pass (O(n) time complexity) and **constant space (O(1))**.
+
+### Breakdown of the Code:
+
+```cpp
+void sortColors(vector<int>& nums) {
+    int low = 0;             // Points to the position to place 0s
+    int mid = 0;             // Current element under consideration
+    int high = nums.size()-1; // Points to the position to place 2s
+
+    while(mid <= high) {
+        if(nums[mid] == 1) {
+            mid++;           // 1 is in the correct place, just move on
+        } else if(nums[mid] == 0) {
+            swap(nums[low], nums[mid]);  // Place 0 at the beginning
+            low++;
+            mid++;
+        } else if(nums[mid] == 2) {
+            swap(nums[mid], nums[high]); // Place 2 at the end
+            high--;
+            // Do NOT increment mid here because the swapped value needs to be re-evaluated
+        }
+    }
+}
+```
+
+### Key Points:
+
+* `low` keeps track of where the next 0 should go.
+* `high` keeps track of where the next 2 should go.
+* `mid` traverses the array and decides what to do with each value.
+
+### Time and Space Complexity:
+
+* **Time:** O(n)
+* **Space:** O(1)
+
+### Example:
+
+Input: `[2, 0, 2, 1, 1, 0]`
+Output: `[0, 0, 1, 1, 2, 2]`
+
+Let me know if you want a dry run example or need the Python version too.
+
