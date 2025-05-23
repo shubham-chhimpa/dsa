@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int leastInterval(vector<char>& tasks, int n) {
+        unordered_map<int,int> freq;
+        int size = tasks.size();
+        int maxFreq=0;
+        for(char task : tasks){
+            freq[task-'A']++;
+            maxFreq = max(maxFreq,freq[task-'A']);
+        }
+        int maxFreqCount = 0;
+        for(auto [k,v] : freq){
+            if(v==maxFreq) maxFreqCount++;
+        }
+        int maxInterval = (maxFreq-1) * (n+1)  + maxFreqCount;
+        return max(maxInterval,size);
+    }
+};
