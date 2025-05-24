@@ -1,0 +1,36 @@
+/*
+// Definition for a Node.
+class Node {
+public:
+    int val;
+    vector<Node*> neighbors;
+    Node() {
+        val = 0;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val) {
+        val = _val;
+        neighbors = vector<Node*>();
+    }
+    Node(int _val, vector<Node*> _neighbors) {
+        val = _val;
+        neighbors = _neighbors;
+    }
+};
+*/
+
+class Solution {
+public:
+    Node* dfs(Node* source,unordered_map<Node*,Node*> &visited){
+        if(visited.find(source) != visited.end()) return visited[source];
+        Node* curr = new Node(source->val);
+        visited[source] =curr;
+        for(auto neighbour: source->neighbors) curr->neighbors.push_back(dfs(neighbour,visited));
+        return curr;
+    }
+    Node* cloneGraph(Node* node) {
+        if(!node) return NULL;
+        unordered_map<Node*,Node*> visited;
+        return dfs(node,visited);
+    }
+};
