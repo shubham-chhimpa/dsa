@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int ladderLength(string beginWord, string endWord, vector<string>& wordList) {
+        unordered_map<string,int> wordListMap;
+        int size = endWord.size();
+        for(string word:wordList){
+            wordListMap[word]= -1;
+        }
+        if(wordListMap.find(endWord) == wordListMap.end()) return 0;
+        queue<pair<int,string>> q;
+        q.push({1,beginWord});
+        while(!q.empty()){
+            auto curr = q.front();
+            q.pop();
+            int step = curr.first;
+            string word = curr.second;
+            if(word==endWord) return step;
+            for(int i=0;i<26;i++){
+                for(int j=0;j<size;j++){
+                    char c = i +'a';
+                    string newWord = word.substr(0,j) + c + word.substr(j+1,size);
+                    if(wordListMap[newWord] == -1){
+                        wordListMap[newWord]= 1;
+                        q.push({step+1,newWord});
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
