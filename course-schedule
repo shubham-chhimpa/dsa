@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool dfs(int source,vector<vector<int>> &adj,vector<int> &visited){
+            if(visited[source] == 1) return false;
+            if(visited[source] == 2) return true;
+            visited[source] = 1;
+            for(int dependency: adj[source]) if(!dfs(dependency,adj,visited))return false;
+            visited[source] = 2;
+        return true;
+    }
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> adj(numCourses,vector<int>());
+        for(auto p: prerequisites){
+            int u = p[0];
+            int v = p[1];
+            adj[u].push_back(v);
+        }
+        vector<int> visited(numCourses,0);
+        for(int i=0;i<numCourses;i++){
+            if(visited[i]==0 and !dfs(i,adj,visited)) return false;
+        }
+        return true;
+    }
+};
