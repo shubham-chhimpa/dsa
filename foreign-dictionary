@@ -1,0 +1,56 @@
+class Solution {
+public:
+    string foreignDictionary(vector<string>& words) {
+        int len  =words.size();
+        unordered_map<char,unordered_set<char>> adj;
+        unordered_map<char,int> indegree;
+        for(string word : words){
+            for(char c: word){
+                adj[c];
+                indegree[c]=0 ;
+            }
+        }
+        //building the graph
+        for(int i=0;i<len-1;i++){
+            string word1 = words[i];
+            string word2 = words[i+1];
+            int minlen = min(word1.size(),word2.size());
+            bool found = false;
+            for(int j=0;j<minlen;j++){
+                char from = word1[j];
+                char to = word2[j];
+                if(from != to){
+                    if(adj[from].find(to) ==adj[from].end()){
+                        adj[from].insert(to);
+                        indegree[to]++;
+                    }
+                    found=true;
+                    break;
+                }
+            }
+            if(!found and word2.size()<word1.size()) return "";
+        }
+
+        //kahn algo for tological sorting
+
+        queue<char> q;
+        for(auto [key,val] : indegree){
+            if(val==0) q.push(key);
+        }
+        string res;
+        while(!q.empty()){
+            char curr = q.front();
+            q.pop();
+            res+=curr;
+
+            for(char neigh: adj[curr]){
+                indegree[neigh]--;
+                if(indegree[neigh]==0){
+                    q.push(neigh);
+                }
+            }
+        }
+        if(res.size() < adj.size()) return "";
+        return res;
+    }
+};
