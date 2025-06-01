@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        int cnt = 0;
+        vector<vector<int>> adj(n,vector<int>());
+        vector<vector<int>> rev(n,vector<int>());
+        vector<bool> vis(n,false);
+        queue<int> q;
+        q.push(0);
+        vis[0]=true;
+        for(auto c:connections){
+            int u =c[0];
+            int v = c[1];
+            adj[u].push_back(v);
+            rev[v].push_back(u);
+            
+        }
+        while(!q.empty()){
+            int curr = q.front();
+            q.pop();
+
+            for(int n : adj[curr]){
+                if(!vis[n]){
+                    cnt++;
+                    vis[n]=true;
+                    q.push(n);
+                }
+        
+            }
+            for(int n : rev[curr]){
+                if(!vis[n]){
+                    vis[n]=true;
+                    q.push(n);
+                }
+            }
+        }
+
+        return cnt;
+    }
+};
