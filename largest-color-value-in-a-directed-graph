@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int largestPathValue(string colors, vector<vector<int>>& edges) {
+        int n = colors.size();
+        int maxFreq = 0;
+        vector<vector<int>> freq(n,vector<int>(26,0));
+        vector<vector<int>> adj(n,vector<int>());
+        vector<int> indegree(n,0);
+        for(auto edge:edges){
+            int u = edge[0];
+            int v = edge[1];
+            adj[u].push_back(v);
+            indegree[v]++;
+        }
+        queue<int> q;
+        for(int i=0;i<n;i++){
+            if(indegree[i]==0){
+                q.push(i);
+            }
+        }
+
+        int cnt = 0;
+
+        while(!q.empty()){
+            cnt++;
+            int curr = q.front();
+            q.pop();
+            freq[curr][colors[curr]-'a']++;
+            maxFreq = max(maxFreq,freq[curr][colors[curr]-'a']);
+            for(int neigh: adj[curr]){
+                indegree[neigh]--;
+                if(indegree[neigh]==0){
+                    q.push(neigh);
+                }
+
+                for(int i=0;i<26;i++){
+                    freq[neigh][i] = max(freq[neigh][i],freq[curr][i]);
+                }
+            }
+        }
+        if(cnt!=n) return -1;
+        return maxFreq;
+    }
+};
