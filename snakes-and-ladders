@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int snakesAndLadders(vector<vector<int>>& board) {
+        int n = board.size();
+        vector<int> vals((n*n)+1,0);
+        int cnt = 1;
+        int flip = false;
+        for(int row=n-1;row>=0;row--){
+            if(flip){
+                for(int col=n-1;col>=0;col--)vals[cnt++] = board[row][col];
+            }else{
+                for(int col=0;col<n;col++)vals[cnt++] = board[row][col];
+            }
+            flip = !flip;
+        }
+        queue<int> q;
+        q.push(1);
+        int steps = 0;
+        while(!q.empty()){
+            int size = q.size();
+            while(size--){
+                int pos = q.front(); 
+                q.pop();
+                if(pos==n*n) return steps;
+                for(int i=1;i<=6;i++){
+                    int new_pos = pos+i;
+                    if(new_pos>n*n) continue;
+                    int val = vals[new_pos];
+                    if(val != -2){
+                        vals[new_pos] = -2;
+                        new_pos  = val == -1 ? new_pos : val;  
+                        q.push(new_pos);
+                    }
+                 
+                }
+            }
+            steps++;
+        }
+
+        return -1;
+    }
+};
