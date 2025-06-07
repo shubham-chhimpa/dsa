@@ -1,0 +1,60 @@
+// User function Template for C++
+
+class Solution {
+  public:
+    int dx[4] = {0,0,-1,1};
+    int dy[4] = {-1,1,0,0};
+    
+    bool isSafe(int x,int y,int rows,int cols){
+        if(x<0 || x>=rows || y<0 || y>=cols) return false;
+        return true;
+    }
+    vector<vector<int>> chefAndWells(int n, int m, vector<vector<char>> &c) {
+        vector<vector<int>> res(n,vector<int>(m,0));
+        queue<pair<int,int>> q;
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                
+                if(c[i][j]=='W'){
+                    q.push({i,j});
+                }
+            }
+        }
+        int counter = 1;
+        while(!q.empty()){
+            int size = q.size();
+            while(size--){
+                auto curr = q.front();
+                q.pop();
+                int x = curr.first;
+                int y = curr.second;
+                
+                for(int i=0;i<4;i++){
+                    int xn = x+dx[i];
+                    int yn = y+dy[i];
+                    
+                    if(isSafe(xn,yn,n,m) and (c[xn][yn] == 'H' || c[xn][yn] =='.')){
+                        if(c[xn][yn] == 'H'){
+                            res[xn][yn] = counter*2;
+                        }
+                        c[xn][yn] = 'X';
+                        q.push({xn,yn});
+                    }
+                }   
+            }
+            counter++;
+        }
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(c[i][j]=='H'){
+                    res[i][j]= -1;
+                }
+            }
+        }
+        
+        
+        return res;
+        
+    }
+};
