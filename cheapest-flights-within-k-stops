@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
+        vector<vector<pair<int,int>>> adj(n,vector<pair<int,int>>());
+
+        for(auto flight : flights){
+            int from = flight[0];
+            int to  = flight[1];
+            int price = flight[2];
+            adj[from].push_back({to,price});
+        }
+
+        priority_queue<tuple<int,int,int>, vector<tuple<int,int,int>>,greater<>> q;
+        q.push({0,0,src});
+        vector<vector<int>> min_prices(n+1,vector<int>(k+1,INT_MAX));
+        while(!q.empty()){
+            auto curr = q.top();
+            q.pop();
+            int price =get<0>(curr);
+            int stops = get<1>(curr);;
+            int node = get<2>(curr);;
+            if(node == dst) return price;
+            if(stops>k) continue;
+            for(auto neigh : adj[node]){
+                int new_node = neigh.first;
+                int new_node_price = neigh.second;
+                int new_price = price + new_node_price;
+                if(new_price  < min_prices[new_node][stops]){
+                    min_prices[new_node][stops] = new_price;
+                    q.push({new_price,stops+1,new_node});
+                }
+            }
+        }
+
+        return -1;
+    }
+};
