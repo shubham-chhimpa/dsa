@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int dx[4] = {-1,1,0,0};
+    int dy[4] = {0,0,-1,1};
+    bool isSafe(int x,int y,int rows,int cols){
+        if(x<0 || x>=rows || y<0 || y>=cols) return false;
+        return true;
+    }
+    int minimumEffortPath(vector<vector<int>>& heights) {
+        int rows= heights.size();
+        int cols  = heights[0].size();
+        vector<vector<int>> min_efforts(rows,vector<int>(cols,INT_MAX));
+        priority_queue<pair<int,pair<int,int>>,vector<pair<int,pair<int,int>>>, greater<>> q;
+
+        q.push({0,{0,0}});
+        min_efforts[0][0] = 0;
+        while(!q.empty()){
+            auto curr = q.top();
+            q.pop();
+            int effort = curr.first;
+            int x = curr.second.first;
+            int y = curr.second.second;
+            if(x == rows-1 and y == cols-1) return effort;
+            for(int i=0;i<4;i++){
+                int xn = x+dx[i];
+                int yn = y+dy[i];
+                if(isSafe(xn,yn,rows,cols)){
+                    int height_diff = abs(heights[xn][yn] - heights[x][y]);
+                    int new_effort = max(effort,height_diff);
+                    if(new_effort<min_efforts[xn][yn]){
+                        min_efforts[xn][yn] = new_effort;
+                        q.push({new_effort,{xn,yn}});
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
