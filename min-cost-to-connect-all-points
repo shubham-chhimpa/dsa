@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minCostConnectPoints(vector<vector<int>>& points) {
+        int n = points.size();
+        priority_queue<pair<int,int>,vector<pair<int,int>>,greater<>> q;
+        vector<bool> visited(n,false);
+        q.push({0,0});
+        int cost = 0;
+        int edgesUsed = 0;
+        while(edgesUsed<n){
+            auto curr = q.top();
+            int node = curr.second;
+            q.pop();
+            if(visited[node]) continue;
+            cost += curr.first;
+            edgesUsed++;
+            visited[node] = true;
+            for(int i=0;i<n;i++){
+                if(!visited[i]){
+                    int dis = abs(points[node][0] - points[i][0]) + abs(points[node][1]-points[i][1]);
+                    q.push({dis,i});
+                }
+            }
+        }
+        return cost;
+    }
+};
