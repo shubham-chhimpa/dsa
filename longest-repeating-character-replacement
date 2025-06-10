@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {
+        int n = s.size();
+        unordered_map<char,int> freq;
+        int i=0;
+        int j =0;
+        int mxFreq = 0;
+        int mxWindow = 0;
+        while(j<n){
+            freq[s[j]]++;
+            mxFreq = max(mxFreq,freq[s[j]]);
+            while(j-i+1 - mxFreq > k){
+                freq[s[i]]--;
+                i++;
+            }
+            mxWindow = max(mxWindow,j-i+1);
+          j++;  
+        }
+
+        return mxWindow;
+    }
+
+
+};
