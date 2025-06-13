@@ -1,0 +1,42 @@
+class Solution {
+public:
+    bool solve(vector<vector<char>>& board,int row,int col,vector<vector<bool>> &rows,
+     vector<vector<bool>> &cols,
+    vector<vector<vector<bool>>> &squares
+    ){
+        if(col==9){
+            row++;
+            col=0;
+        }
+        if(row==9) return true;
+        if(board[row][col] != '.') return solve(board,row,col+1,rows,cols,squares);
+        for(int num=1;num<=9;num++){
+            int boxRow = row / 3;
+            int boxCol = col / 3;
+            if(rows[row][num] || cols[col][num] || squares[boxRow][boxCol][num]) continue;  
+            rows[row][num] = cols[col][num] = squares[boxRow][boxCol][num] = true;
+            char val = num +'0';
+            board[row][col] = val;
+            if(solve(board,row,col+1,rows,cols,squares)) return true;
+            board[row][col] = '.';
+            rows[row][num] =  cols[col][num] = squares[boxRow][boxCol][num] = false;
+        }
+
+        return false;
+
+    }
+    void solveSudoku(vector<vector<char>>& board) {
+        vector<vector<bool>> rows(10,vector<bool>(10,false));
+        vector<vector<bool>> cols(10,vector<bool>(10,false));
+        vector<vector<vector<bool>>> squares(3, vector<vector<bool>>(3, vector<bool>(10, false)));
+        for(int row=0;row<9;row++){
+            for(int col=0;col<9;col++){
+                int val = board[row][col];
+                if(val != '.'){
+                    rows[row][val-'0']=cols[col][val-'0']=squares[row/3][col/3][val-'0']=true;
+                }
+            }
+        }
+        solve(board,0,0,rows,cols,squares);
+    }
+};
