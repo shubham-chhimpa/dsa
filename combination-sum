@@ -1,0 +1,21 @@
+class Solution {
+public:
+    void solve(vector<int> &nums,int n,int target,vector<int> &tmp,vector<vector<int>> &ans){
+        if(target ==0 ){
+            ans.push_back(tmp);
+            return;
+        }
+        if(n<0 || target<0) return;
+        tmp.push_back(nums[n]);
+        solve(nums,n,target-nums[n],tmp,ans);
+        tmp.pop_back();
+        solve(nums,n-1,target,tmp,ans);
+    }
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<vector<int>> ans;
+        vector<int> tmp;
+        int n = candidates.size()-1;
+        solve(candidates,n,target,tmp,ans);
+        return ans;
+    }
+};
