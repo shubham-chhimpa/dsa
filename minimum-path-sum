@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int solve(vector<vector<int>> &grid,int row,int col,vector<vector<int>> &memo){
+        if(row==0 and col ==0) return grid[0][0];
+        if(row<0 or col<0) return INT_MAX-1;
+        if(memo[row][col] != -1) return memo[row][col];
+        return memo[row][col] = grid[row][col] + min(solve(grid,row-1,col,memo),solve(grid,row,col-1,memo));
+    }
+    int minPathSum(vector<vector<int>>& grid) {
+        int rows = grid.size();
+        int cols = grid[0].size();
+        vector<vector<int>> memo(rows,vector<int>(cols,-1));
+        return solve(grid,rows-1,cols-1,memo);
+    }
+};
