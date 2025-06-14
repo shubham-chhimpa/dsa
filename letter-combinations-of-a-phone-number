@@ -1,0 +1,32 @@
+class Solution {
+public:
+    void solve(int idx,string &tmp,string digits,unordered_map<char,string> &digitToLetterMap,vector<string> &ans){
+        if(idx == digits.size()){
+            ans.push_back(tmp);
+            return;
+        };
+        string letters = digitToLetterMap[digits[idx]];
+        for(char c: letters){
+            tmp.push_back(c);
+            solve(idx+1,tmp,digits,digitToLetterMap,ans);
+            tmp.pop_back();
+        }
+    }
+    vector<string> letterCombinations(string digits) {
+        vector<string> ans;
+        if(digits=="") return ans;
+        unordered_map<char,string> digitToLetterMap = {
+           { '2' , "abc"},
+           { '3' , "def"},
+           { '4' , "ghi"},
+           { '5' , "jkl"},
+           { '6' , "mno"},
+           { '7' , "pqrs"},
+           { '8' , "tuv"},
+           { '9' , "wxyz"}
+        };
+        string tmp = "";
+        solve(0,tmp,digits,digitToLetterMap,ans);
+        return ans;
+    }
+};
