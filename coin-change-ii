@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int solve(int n ,int amount,vector<int> &coins,vector<vector<int>> &memo){
+        if(amount==0) return 1;
+        if(n<0) return 0;
+        if(memo[n][amount] != -1) return memo[n][amount];
+        if(coins[n]<=amount){
+            return memo[n][amount]= solve(n,amount-coins[n],coins,memo) + solve(n-1,amount,coins,memo);
+        }else{
+            return memo[n][amount]= solve(n-1,amount,coins,memo);
+        }
+    }
+    int change(int amount, vector<int>& coins) {
+        int n = coins.size();
+        vector<vector<int>> memo(n+1,vector<int>(amount+1,-1));
+        return solve(n-1,amount,coins,memo);
+    }
+};
