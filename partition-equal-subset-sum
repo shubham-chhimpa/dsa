@@ -1,0 +1,23 @@
+class Solution {
+public:
+    bool solve(vector<int> &nums,int n,int target,vector<vector<int>> &memo)  {
+        if(target == 0) return true;
+        if(n < 0) return false;
+        if(memo[n][target] != -1) return memo[n][target];
+        if(nums[n] <= target){
+            memo[n][target] = solve(nums,n-1,target-nums[n],memo) || solve(nums,n-1,target,memo);
+        }else{
+            memo[n][target] = solve(nums,n-1,target,memo);
+        }
+        return memo[n][target];
+    }
+    bool canPartition(vector<int>& nums) {
+        int sum = 0;
+        int n = nums.size();
+        for(int num : nums) sum +=num;
+        if(sum % 2 !=0) return false;
+        sum = sum/2;
+        vector<vector<int>> memo(n,vector<int>(sum+1,-1));
+        return solve(nums,n-1,sum,memo);
+    }
+};
