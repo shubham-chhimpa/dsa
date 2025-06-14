@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int solve(string &a,string &b,int n,int m,vector<vector<int>> &memo){
+        if(n<0 or m<0) return 0;
+        int match = 0;
+        int notmatch = 0;
+        if(memo[n][m] != -1) return memo[n][m];
+        if(a[n]==b[m]){
+            match = 1+ solve(a,b,n-1,m-1,memo);
+        }else{
+            notmatch = max(solve(a,b,n-1,m,memo),solve(a,b,n,m-1,memo));
+        }
+
+        return memo[n][m]=max(match,notmatch);   
+    }
+    int longestCommonSubsequence(string text1, string text2) {
+        int n = text1.size();
+        int m = text2.size();
+        vector<vector<int>> memo(n,vector<int>(m,-1));
+        return solve(text1,text2,n-1,m-1,memo);
+    }
+};
