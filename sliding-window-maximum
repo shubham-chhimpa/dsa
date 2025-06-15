@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> maxSlidingWindow(vector<int>& nums, int k) {
+        vector<int> ans;
+        deque<int> q;
+        int n =nums.size();
+        for(int i=0;i<n;i++){
+            
+            // remove the slided index
+            if(!q.empty() and q.front()==i-k)q.pop_front();
+            
+            // remove smaller elements from queue as not needed
+            while(!q.empty() and nums[q.back()] < nums[i]) q.pop_back();
+            
+            q.push_back(i);
+            // add is the window is complete
+            if(i>=k-1){
+                ans.push_back(nums[q.front()]);
+            }
+        }
+
+        return ans;
+    }
+};
