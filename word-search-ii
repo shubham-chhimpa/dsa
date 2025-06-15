@@ -1,0 +1,58 @@
+class TrieNode{
+    public : 
+    TrieNode* children[26];
+    string word="";
+};
+
+class Solution {
+public:
+    int dx[4] = {0,0,1,-1};
+    int dy[4] = {1,-1,0,0};
+    bool isSafe(int x,int y,int rows,int cols){
+        if(x<0 || x>=rows || y<0 ||y >= cols) return false;
+        return true;
+    }
+    void insert(TrieNode* root,string word){
+        TrieNode* curr=root;
+        for(char c : word){
+            int index = c-'a';
+            if(!curr->children[index]) curr->children[index] = new TrieNode();
+            curr=curr->children[index];
+        }
+        curr->word=word;
+    }
+    void dfs(vector<vector<char>>& board,int x,int y,int rows,int cols,vector<string> &ans,TrieNode* node){
+        char c = board[x][y];
+        node = node->children[c-'a'];
+        if(node->word != ""){
+            ans.push_back(node->word);
+            node->word="";
+        }
+        board[x][y] = '#';
+        for(int i=0;i<4;i++){
+            int xn = x+dx[i];
+            int yn = y+dy[i];
+            if(isSafe(xn,yn,rows,cols) and board[xn][yn] != '#' and node->children[board[xn][yn]-'a']){
+                dfs(board,xn,yn,rows,cols,ans,node);
+            }
+        }
+        board[x][y] = c;
+    }
+    vector<string> findWords(vector<vector<char>>& board, vector<string>& words) {
+        vector<string> ans;
+        int rows = board.size();
+        int cols = board[0].size();
+        TrieNode* root = new TrieNode();
+        for(string word:words){
+            insert(root,word);
+        }
+
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                int c = board[i][j]-'a';
+                if(root->children[c]) dfs(board,i,j,rows,cols,ans,root);
+            }
+        }
+        return ans;
+    }
+};
