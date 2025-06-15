@@ -1,0 +1,48 @@
+class TrieNode{
+    public:
+    TrieNode* children[26];
+    bool isEnd=false;
+};
+
+class WordDictionary {
+public:
+    TrieNode* root;
+    WordDictionary() {
+        root = new TrieNode();
+    }
+    
+    void addWord(string word) {
+        TrieNode* curr =root;
+        for(char n : word){
+            int index = n-'a';
+            if(!curr->children[index]) curr->children[index] =  new TrieNode();
+            curr = curr->children[index];
+        }
+        curr->isEnd = true;
+    }
+
+    bool solve(string word,int pos,TrieNode* node){
+        if(!node) return false;
+        if(pos==word.size()) return node->isEnd;
+        if(word[pos]!='.'){
+            int index = word[pos]-'a';
+            return solve(word,pos+1,node->children[index]);
+        }else{
+            for(int i=0;i<26;i++){
+                if(node->children[i] and solve(word,pos+1,node->children[i]))return true;
+            }
+        }
+        return false;
+    }
+    
+    bool search(string word) {
+        return solve(word,0,root);
+    }
+};
+
+/**
+ * Your WordDictionary object will be instantiated and called as such:
+ * WordDictionary* obj = new WordDictionary();
+ * obj->addWord(word);
+ * bool param_2 = obj->search(word);
+ */
