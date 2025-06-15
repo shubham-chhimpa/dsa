@@ -1,0 +1,19 @@
+class Solution {
+public:
+    int solve(vector<int> &nums,int n, int nextIndex,vector<vector<int>> &memo){
+        if(n<0) return 0;
+        if(memo[n][nextIndex] != -1) return memo[n][nextIndex];
+        if(nextIndex == nums.size() || nums[n]<nums[nextIndex]){
+            return memo[n][nextIndex]=max(1+solve(nums,n-1,n,memo),solve(nums,n-1,nextIndex,memo));
+        }else{
+            return memo[n][nextIndex]= solve(nums,n-1,nextIndex,memo);
+        }
+    }
+    int lengthOfLIS(vector<int>& nums) {
+        int n = nums.size();
+        vector<vector<int>> memo(n+1,vector<int>(n+1,-1));
+        solve(nums,n-1,n,memo);
+        return memo[n-1][n];
+        
+    }
+};
