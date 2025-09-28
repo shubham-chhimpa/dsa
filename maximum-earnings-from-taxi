@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int getPrev(vector<vector<int>> &rides,int m){
+        int low =0;
+        int high = m-1;
+        int current_start = rides[m][0];
+        int prev_end = -1;
+        while(low<=high){
+           int mid = low + (high -low)/2;
+           if(rides[mid][1]<=current_start){
+            prev_end=mid;
+            low=mid+1;
+           }else{
+            high = mid-1;
+           } 
+        }
+        return prev_end;
+    }
+    long long solve(vector<vector<int>>& rides,int m,vector<long long> &memo){
+        if(m<0) return 0;
+        if(memo[m] != -1) return memo[m];
+        long long skip = solve(rides,m-1,memo);
+        long long earn = rides[m][2] + (long long)(rides[m][1]-rides[m][0]);
+        int prev = getPrev(rides,m);
+        long long notskip = earn+ (prev>=0 ? solve(rides,prev,memo):0);
+        return memo[m]=max(skip,notskip);
+    }
+    long long maxTaxiEarnings(int n, vector<vector<int>>& rides) {
+        sort(rides.begin(),rides.end(),[](auto &a,auto &b){ return a[1]<b[1];});
+        vector<long long> memo(rides.size(),-1);
+        return solve(rides,rides.size()-1,memo);
+    }
+};
